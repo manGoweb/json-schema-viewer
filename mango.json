@@ -22,7 +22,8 @@
   "dependencies": [
     "lt-ie-9",
     "stylus-normalize",
-    "jquery"
+    "jquery",
+    "json-pointer"
   ],
   "data": {
     "global": "src/data/global.json"

@@ -1,6 +1,7 @@
 var Component = require('./component')
 var $ = jQuery
 var tabEl = '<b> </b>'
+var pointer = require('json-pointer')
 
 /**
  * SchemaViewer component class
@@ -8,26 +9,38 @@ var tabEl = '<b> </b>'
  */
 class SchemaViewer extends Component {
 
+	constructor(element, data) {
+		super(element, data)
+
+		this.input = this.child(data.source)
+		this.target = this.child(data.target)
+	}
+
 	get listeners() {
-		return {
-			'change': 'handleChange',
-			'input': 'handleChange',
-			'click': 'handleChange'
-		}
+		var obj = {}
+		// obj['input ' + this.data.source] = 'handleChange'
+		obj['change ' + this.data.source] = 'handleChange'
+		obj['blur ' + this.data.source] = 'handleChange'
+		return obj
 	}
 
 	handleChange(e, self) {
 		var input
 
 		try {
-			input = JSON.parse(self.child(self.data.source).val())
+			input = JSON.parse(self.input.val())
 		} catch(e) {
-			return alert('Error parsing JSON')
+			self.target[0].innerHTML = 'Error parsing JSON'
+			return
 		}
+
+		console.log(input)
+
+		self.original = input
 
 		var output = self.convert(input, 0)
 
-		self.child(self.data.target)[0].innerHTML = output
+		self.target[0].innerHTML = output
 
 	}
 
@@ -49,7 +62,6 @@ class SchemaViewer extends Component {
 		if(input.properties) {
 			var lvl = level + 1
 
-
 			for (var property in input.properties){
 				str += '\n' + tabEl + tab + '<strong>' + property + '</strong>: '
 				str += this.convert(input.properties[property], lvl)
@@ -60,9 +72,24 @@ class SchemaViewer extends Component {
 		if(input.items) {
 			var lvl = level + 1
 
-			str += ' [' + '\n'
+			str += ' <span>[</span>' + '\n'
 			str += tabEl + tab + this.convert(input.items, lvl)
-			str += '\n' + tab + ']'
+			str += '\n' + tab + '<span>]</span>'
+		}
+
+		if(input.$ref){
+			var obj = pointer.get(this.original, input.$ref.replace(/^#/, ''))
+			str += this.convert(obj, level)
+		}
+
+		if(input.anyOf) {
+			var lvl = level + 1
+			str += '<span>&lt;</span>\n'
+			input.anyOf.forEach((option, i, arr) => {
+				str += tabEl + tab + this.convert(option, lvl)
+				if(i < arr.length - 1) str += '\n' + tabEl + tab + '<span>/</span> \n'
+			})
+			str += '\n' + tab + '<span>&gt;</span>'
 		}
 
 		return str

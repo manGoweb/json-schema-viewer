@@ -14,16 +14,40 @@
 
 	&-output
 		display block
-		border 1px solid silver
-		border-radius 3px
-		padding $padding
+		margin-bottom $spacing * 2
 		font-family $font-family-monospace
 
 		i
 			color gray
 		b
+			$colors = #eee, #B2EDDB, #80D4BB, #B7D0EC, #86AAD3, #D0F8BB, #B1EE90, #FFD6C0, #FFBD9A, #CEE0F5, #CBF5E8
 			display inline-block
 			width 1.5em
-			border-left 1px dotted #eee
+			border-left 1px dotted $colors[0]
+
+			+ b
+				border-color $colors[1]
+				+ b
+					border-color $colors[2]
+					+ b
+						border-color $colors[3]
+						+ b
+							border-color $colors[4]
+							+ b
+								border-color $colors[5]
+								+ b
+									border-color $colors[6]
+									+ b
+										border-color $colors[7]
+										+ b
+											border-color $colors[8]
+											+ b
+												border-color $colors[9]
+												+ b
+													border-color $colors[10]
+
+
+
+
 		strong
 			// color black
