@@ -57,7 +57,11 @@ class SchemaViewer extends Component {
 			type = type.join('|')
 		}
 
+
+		if(input.title) str += '<span>' + input.title + '</span>: '
 		str += '<i>' + type + '</i>'
+		if(input.description) str += ' <span>(' + input.description + ')</span>'
+
 
 		if(input.properties) {
 			var lvl = level + 1
@@ -69,6 +73,7 @@ class SchemaViewer extends Component {
 
 		}
 
+
 		if(input.items) {
 			var lvl = level + 1
 
@@ -77,10 +82,12 @@ class SchemaViewer extends Component {
 			str += '\n' + tab + '<span>]</span>'
 		}
 
+
 		if(input.$ref){
 			var obj = pointer.get(this.original, input.$ref.replace(/^#/, ''))
 			str += this.convert(obj, level)
 		}
+
 
 		if(input.anyOf) {
 			var lvl = level + 1
