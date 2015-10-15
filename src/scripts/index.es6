@@ -12,7 +12,7 @@ require('./plugins')
 //
 // Components declarations
 var components = {
-	'example': require('./components/example')
+	'schemaviewer': require('./components/schemaviewer')
 }
 // Init function
 var init = (component) => {

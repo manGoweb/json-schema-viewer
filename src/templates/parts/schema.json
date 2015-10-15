@@ -1,0 +1,304 @@
+{
+  "type": "object",
+  "properties": {
+    "pagination": {
+      "type": "object",
+      "properties": {
+        "previous": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "uri"
+        },
+        "current": {
+          "type": "string",
+          "format": "uri"
+        },
+        "next": {
+          "type": [
+            "null",
+            "string"
+          ],
+          "format": "uri"
+        }
+      }
+    },
+    "aggregations": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pageCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unseen": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "notifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "time": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "seenAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "offerEvent": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "avatarUrl": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "format": "uri"
+                  }
+                }
+              },
+              "price": {
+                "$ref": "#/definitions/moneyOut"
+              },
+              "commentText": {
+                "type": "string"
+              },
+              "shootingDate": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "date-time"
+              },
+              "formatted": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string"
+                  },
+                  "action": {
+                    "type": "string"
+                  },
+                  "color": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "required": [
+              "type",
+              "actor",
+              "createdAt"
+            ]
+          },
+          "jobEvent": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "properties": {
+              "deadline": {
+                "type": [
+                  "null",
+                  "string"
+                ],
+                "format": "date-time"
+              },
+              "assignedPhotographer": {
+                "type": [
+                  "null",
+                  "object"
+                ],
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "rating": {
+                    "$ref": "#/definitions/ratingPairNullable"
+                  },
+                  "avatarUrl": {
+                    "type": [
+                      "null",
+                      "string"
+                    ],
+                    "format": "uri"
+                  },
+                  "isAvailable": {
+                    "type": "boolean"
+                  },
+                  "location": {
+                    "$ref": "#/definitions/locationNullable"
+                  },
+                  "promoPhotos": {
+                    "$ref": "#/definitions/photos"
+                  }
+                }
+              }
+            },
+            "required": []
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "rating": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "ratingPair": {
+      "type": "object",
+      "properties": {
+        "average": {
+          "$ref": "#/definitions/rating"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ratingPairNullable": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ratingPair"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "currency": {
+      "type": "string",
+      "enum": [
+        "USD",
+        "CZK"
+      ]
+    },
+    "moneyOut": {
+      "type": "object",
+      "properties": {
+        "cents": {
+          "type": "integer",
+          "minimum": 0,
+          "exclusiveMinimum": true
+        },
+        "currency": {
+          "$ref": "#/definitions/currency"
+        },
+        "formatted": {
+          "type": "string"
+        }
+      }
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        },
+        "radius": {
+          "type": "number",
+          "minimum": 0
+        },
+        "text": {
+          "type": [
+            "null",
+            "string"
+          ]
+        }
+      },
+      "required": [
+        "latitude",
+        "longitude"
+      ]
+    },
+    "locationNullable": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/location"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "photos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "photoId": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

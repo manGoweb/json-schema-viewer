@@ -8,11 +8,24 @@ block content
 
 	main.layout(role='main')
 
-		h1= global.title
+		.schemaviewer#schemaviewer
+			h1.schemaviewer-title JSON Schema viewer
 
-		include parts/example
+			textarea#schema.schemaviewer-source(placeholder='...paste JSON Schema here')
 
-		include parts/samplecontent
+			pre#output.schemaviewer-output
+
+		script.
+			initComponents.push({
+				name: 'schemaviewer',
+				place: '#schemaviewer',
+				data: {
+					source: '#schema',
+					target: '#output'
+				}
+			})
 
 
+
+		p Brought to you by <a href="http://www.mangoweb.cz">manGoweb</a>
 
