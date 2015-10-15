@@ -89,10 +89,11 @@ class SchemaViewer extends Component {
 		}
 
 
-		if(input.anyOf) {
+		if(input.anyOf || input.oneOf) {
+			var of = input.anyOf || input.oneOf
 			var lvl = level + 1
 			str += '<span>&lt;</span>\n'
-			input.anyOf.forEach((option, i, arr) => {
+			of.forEach((option, i, arr) => {
 				str += tabEl + tab + this.convert(option, lvl)
 				if(i < arr.length - 1) str += '\n' + tabEl + tab + '<span>/</span> \n'
 			})
